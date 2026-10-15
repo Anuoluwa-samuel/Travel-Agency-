@@ -1,0 +1,190 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dark mode is planned but not shipped yet (DESIGN.md §1). The variant is kept so components stay ready. */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * ORBIS design tokens — see DESIGN.md.
+ * Brand primaries: Deep Navy #0B2545 · Champagne Gold #D6A85C · Cloud White #F7F8FA.
+ * Gold is NOT used for text on light surfaces (2.1:1); use gold-700 instead.
+ */
+@theme {
+  --color-navy-950: #071a33;
+  --color-navy-900: #0b2545;
+  --color-navy-800: #13315c;
+  --color-navy-700: #1d4073;
+  --color-navy-500: #3e5f8a;
+  --color-navy-300: #8da2c0;
+  --color-navy-100: #dce3ee;
+
+  --color-gold-50: #fbf6ec;
+  --color-gold-100: #f4e7cd;
+  --color-gold-300: #e6c48e;
+  --color-gold-500: #d6a85c;
+  --color-gold-600: #b88a3e;
+  --color-gold-700: #8c6a2e;
+
+  --color-cloud-50: #f7f8fa;
+  --color-cloud-100: #eef1f5;
+  --color-slate-300: #c9d0da;
+  --color-slate-500: #6b7685;
+  --color-ink: #121a26;
+
+  --color-status-confirmed: #1f7a4d;
+  --color-status-pending: #a15c07;
+  --color-status-proposed: #3e5f8a;
+  --color-status-estimate: #8c6a2e;
+  --color-status-danger: #b42318;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --shadow-soft: 0 1px 2px rgb(11 37 69 / 0.06), 0 8px 24px rgb(11 37 69 / 0.06);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-fraunces);
+  --font-display: var(--font-fraunces);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 28px;
+  --radius-4xl: 32px;
+}
+
+:root {
+  --radius: 10px;
+
+  --background: #f7f8fa;
+  --foreground: #0b2545;
+  --card: #ffffff;
+  --card-foreground: #0b2545;
+  --popover: #ffffff;
+  --popover-foreground: #0b2545;
+
+  --primary: #0b2545;
+  --primary-foreground: #f7f8fa;
+  --secondary: #eef1f5;
+  --secondary-foreground: #0b2545;
+  --muted: #eef1f5;
+  --muted-foreground: #5b6675;
+  --accent: #fbf6ec;
+  --accent-foreground: #0b2545;
+  --destructive: #b42318;
+
+  --border: #dfe4eb;
+  --input: #c9d0da;
+  --ring: #1d4073;
+
+  --chart-1: #0b2545;
+  --chart-2: #d6a85c;
+  --chart-3: #3e5f8a;
+  --chart-4: #8da2c0;
+  --chart-5: #8c6a2e;
+
+  --sidebar: #0b2545;
+  --sidebar-foreground: #dce3ee;
+  --sidebar-primary: #d6a85c;
+  --sidebar-primary-foreground: #0b2545;
+  --sidebar-accent: #13315c;
+  --sidebar-accent-foreground: #f7f8fa;
+  --sidebar-border: #13315c;
+  --sidebar-ring: #d6a85c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv11", "ss01";
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading text-navy-900;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  /* On navy surfaces the focus ring switches to gold for contrast. */
+  .surface-dark {
+    --ring: #d6a85c;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold tracking-[0.18em] text-gold-700 uppercase;
+  }
+  .surface-dark .eyebrow {
+    @apply text-gold-500;
+  }
+  .gold-rule {
+    @apply h-px w-12 bg-gold-500;
+  }
+  .container-page {
+    @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

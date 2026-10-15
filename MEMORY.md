@@ -4,7 +4,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Current state
 
-- **Phase:** 1 complete (discovery & architecture docs on branch `phase-1/discovery-architecture`). Next: Phase 2, design system & foundation.
+- **Phase:** 2 complete on branch `phase-2/foundation`. Next: Phase 3, public travel experience.
 - **Repo:** https://github.com/Anuoluwa-samuel/Travel-Agency- (was empty at start; fresh build)
 - **Local path:** `~/Downloads/travel agency`
 - **Default branch:** `main`
@@ -21,6 +21,13 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 | Date | Decision | Ref |
 |------|----------|-----|
+| 2026-10-15 | Next.js **16.4** with Cache Components: session reads must sit inside `<Suspense>`; account/admin layouts set `instant = false` so auth is re-checked every navigation | ARCHITECTURE §1 |
+| 2026-10-15 | `APP_ENV` (development/test/staging/production) controls deployment strictness, separate from `NODE_ENV` | README |
+| 2026-10-15 | Packages pinned to versions ≥ 1 day old (pnpm `minimumReleaseAge` policy) | package.json |
+| 2026-10-15 | `cn` helper comes from shadcn's own `cn` package (replaces clsx + tailwind-merge) | components.json |
+| 2026-10-15 | Better Auth field names drive `users`/`sessions`/`accounts`/`verifications`/`two_factors`; `users.email_verified` is a boolean (not a timestamp as first drafted) | data-model §1 |
+| 2026-10-15 | Customers and signed-out visitors get a 404 on `/admin`; privileged staff without 2FA are sent to `/account/security?required=2fa` | RULES §5 |
+| 2026-10-15 | Typed routes off for now: nav config holds hrefs for unbuilt pages behind `live: false` | config/navigation.ts |
 | 2026-10-15 | Next.js App Router + TS + Tailwind + shadcn/ui | ARCHITECTURE §1 |
 | 2026-10-15 | PostgreSQL + Drizzle; pg-boss for jobs (no Redis in v1) | ADR-002, ADR-003 |
 | 2026-10-15 | Money in integer minor units, append-only ledger | ADR-004 |
@@ -41,14 +48,18 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Environment notes
 
-- Node v24, pnpm 12 available locally. PostgreSQL not installed locally → use Docker Compose.
+- Node v24, pnpm 12, Docker locally. Postgres runs in Docker on **port 5544** (5433 is used by another project on this machine).
+- Dev DB `orbis`, test DB `orbis_test` (wiped by every integration run).
+- Demo account password lives only in `.env.local` as `SEED_DEMO_PASSWORD`.
+- No DB passwords in the repo (GitGuardian flagged the old compose file): local Docker and the CI service use trust auth bound to localhost. The original local volume was created with a password, so the existing `.env.local` URL still includes one; fresh setups don't need it.
+- The folder path contains a space: use `pathToFileURL` / `fileURLToPath` rather than `URL.pathname` in scripts.
 
 ## Integration status
 
 | Integration | Status |
 |-------------|--------|
 | Paystack | not started |
-| Resend (email) | not started |
+| Resend (email) | adapter built; console fallback in dev; not yet configured |
 | Anthropic Claude (AI planner) | not started |
 | S3/R2 storage | not started |
 | Flight / hotel suppliers | not started; no credentials |
@@ -56,6 +67,15 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | Weather / flight status / advisories | not started |
 
 ## Phase log
+
+### Phase 2 — 2026-10-15
+- Scaffolded Next.js 16.4 + Tailwind 4 + shadcn/ui; ORBIS tokens, fonts, logo, core and feedback components.
+- Drizzle schema for identity, catalogue (destinations, packages, itineraries, options, departures, price rules, fees, policies, payment plans) and platform; DB-level guards (capacity, non-negative prices, one hero image, case-insensitive email, append-only audit log).
+- Better Auth with email verification, reset, change password, TOTP 2FA, DB rate limits; RBAC helpers; Proxy and security headers.
+- Public, auth, account and admin shells; seed with fictional data and a demo account per role.
+- Tests: 57 unit + 16 integration pass; lint, typecheck and production build pass. Browser check: sign-up → email link → account → 2FA enrol → sign-in with 2FA prompt; customer gets 404 on /admin; no horizontal scroll at 375px.
+- Added GitHub Actions CI (`.github/workflows/ci.yml`), verified by running each step in a clean copy with no `.env.local`. `pnpm typecheck` now runs `next typegen` first.
+- Deferred (tracked in TASKS): Playwright config, DatePicker/TravellerPicker/DataTable/Timeline, request IDs + audit service, idempotency helper, nonce-based CSP (Phase 7).
 
 ### Phase 1 — 2026-10-15
 - Added `docs/data-model.md` (110 tables across 14 domains, conventions, indexes, retention), `docs/state-machines.md`, `docs/journeys.md` (J01–J18 + route map + navigation), `docs/integrations.md`, `docs/assumptions.md`.

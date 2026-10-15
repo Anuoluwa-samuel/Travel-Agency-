@@ -28,11 +28,12 @@ This document defines every table we plan to build, grouped by domain. For each 
 
 | Table | Key columns | Constraints / notes |
 |-------|-------------|---------------------|
-| `users` | email, email_verified_at, name, phone, phone_verified_at, image, locale, timezone, status (`active`/`suspended`/`deleted`) | `UNIQUE lower(email)` |
+| `users` | email, email_verified (bool, Better Auth), two_factor_enabled, name, phone, phone_verified_at, image, locale, timezone, status (`active`/`suspended`/`deleted`) | `UNIQUE lower(email)` |
 | `accounts` | user_id, provider, provider_account_id, password_hash | Better Auth; `UNIQUE (provider, provider_account_id)` |
 | `sessions` | user_id, token_hash, expires_at, ip, user_agent | Revocable; expired rows purged by job |
-| `verification_tokens` | identifier, token_hash, purpose (`email_verify`/`password_reset`/`guest_lookup`/`magic_link`), expires_at, consumed_at | Single-use: `consumed_at` set in same tx as use |
-| `two_factor` | user_id, secret_enc, backup_codes_enc, enabled_at | Required for staff with finance/admin permissions |
+| `verifications` | identifier, value, expires_at | Better Auth tokens (email verification, password reset). Guest booking lookup codes get their own table in Phase 4 |
+| `two_factors` | user_id, secret, backup_codes, verified, failed_verification_count, locked_until | Better Auth encrypts the secret and codes; required for privileged staff roles |
+| `auth_rate_limits` | key, count, last_request | Better Auth's DB-backed limiter for sign-in, sign-up, reset and 2FA |
 | `customer_profiles` | user_id (PK/FK), preferred_currency, home_city, nationality, travel_interests text[], marketing_consent_at, whatsapp_consent_at, assigned_staff_id | 1:1 with users |
 | `staff_profiles` | user_id (PK/FK), job_title, department, is_active | 1:1 with users |
 | `roles` | key (`super_admin`, `ops_manager`, …), name, is_system | Seeded |
