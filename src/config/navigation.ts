@@ -35,7 +35,7 @@ export const primaryNav: (NavItem | NavGroup)[] = [
       { label: "Visa readiness", href: "/visa", description: "Checklists and document help", live: false },
     ],
   },
-  { label: "Guides", href: "/guides", live: false },
+  { label: "Guides", href: "/guides", live: true },
   { label: "Contact", href: "/contact", live: true },
 ];
 
@@ -47,7 +47,8 @@ export const footerNav: NavGroup[] = [
       { label: "Packages", href: "/packages", live: true },
       { label: "Flights", href: "/flights", live: true },
       { label: "Hotels", href: "/hotels", live: true },
-      { label: "Guides", href: "/guides", live: false },
+      { label: "Guides", href: "/guides", live: true },
+      { label: "Consultations", href: "/consultations", live: true },
     ],
   },
   {

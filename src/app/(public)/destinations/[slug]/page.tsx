@@ -22,6 +22,7 @@ import {
   getDestination,
   getPublishedSlugs,
 } from "@/server/services/catalogue/queries";
+import { getArticlesForDestination } from "@/server/services/content/articles";
 
 export async function generateStaticParams() {
   const { destinations } = await getPublishedSlugs();
@@ -59,6 +60,7 @@ async function Destination({ params }: { params: Promise<{ slug: string }> }) {
     notFound();
   }
 
+  const guides = await getArticlesForDestination(d.id);
   const code = d.budgetCurrency?.trim() ?? "";
   const currency: CurrencyCode | null = isCurrencyCode(code) ? code : null;
   const months = bestMonthsLabel(d.bestMonths);
@@ -149,6 +151,24 @@ async function Destination({ params }: { params: Promise<{ slug: string }> }) {
                 {d.packages.map((p) => (
                   <li key={p.slug} className="flex">
                     <PackageCard p={p} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {guides.length > 0 && (
+            <section aria-labelledby="guides" className="flex flex-col gap-4">
+              <h2 id="guides" className="text-2xl">
+                Read before you go
+              </h2>
+              <ul className="flex flex-col divide-y border-y">
+                {guides.map((g) => (
+                  <li key={g.slug} className="py-4">
+                    <Link href={`/guides/${g.slug}`} className="text-lg font-medium underline-offset-4 hover:underline">
+                      {g.title}
+                    </Link>
+                    <p className="mt-1 text-sm text-muted-foreground">{g.excerpt}</p>
                   </li>
                 ))}
               </ul>

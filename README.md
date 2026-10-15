@@ -2,7 +2,7 @@
 
 ORBIS is a full travel business platform: a public site, packages and bookings, a customer portal, planning tools and an operations back office. It is built for an agency based in Nigeria that serves international customers.
 
-> **Status:** Phases 0–2 done; Phase 3 (public site, catalogue, enquiries) mostly done. See [TASKS.md](TASKS.md).
+> **Status:** Phases 0–3 done (legal page text pending). Next: Phase 4, booking and payments. See [TASKS.md](TASKS.md).
 
 ## Documentation
 
@@ -86,6 +86,7 @@ In development, emails (verification, password reset) are printed to the server 
 | `pnpm test` | Unit and integration tests |
 | `pnpm test:unit` | Pure logic tests (no database) |
 | `pnpm test:integration` | Tests against `TEST_DATABASE_URL` (reset on every run) |
+| `pnpm test:e2e` | Playwright journeys against `orbis_e2e` (reset and seeded on every run; server on port 3210, override with `E2E_PORT`) |
 | `pnpm check` | Lint + typecheck + tests (run before every commit) |
 | `pnpm db:up` / `pnpm db:down` | Start / stop local Postgres |
 | `pnpm db:generate` | Generate a migration from schema changes |
@@ -95,7 +96,7 @@ In development, emails (verification, password reset) are printed to the server 
 
 ## Continuous integration
 
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every pull request and on pushes to `main`. In order: install with the frozen lockfile, lint, typecheck, unit and integration tests, migrations on a clean database, then a production build.
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every pull request and on pushes to `main`. In order: install with the frozen lockfile, lint, typecheck, unit and integration tests, migrations and seed on a clean database, a production build, then Playwright end-to-end tests against that build.
 
 - Postgres 16 runs as a service container. The job creates `orbis_test` for the integration suite.
 - Auth and encryption secrets are generated fresh on every run. No real credentials are stored in GitHub.

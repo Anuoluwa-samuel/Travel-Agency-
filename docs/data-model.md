@@ -127,8 +127,9 @@ This document defines every table we plan to build, grouped by domain. For each 
 | `enquiries` | reference, category (`package`/`custom_trip`/`flight`/`hotel`/`visa`/`group`/`corporate`/`other`), status (`new`/`assigned`/`in_progress`/`awaiting_customer`/`awaiting_supplier`/`converted`/`closed`), priority, customer_user_id, contact_name/email/phone, preferred_contact, package_id, destination_id, travel_window, travellers jsonb, budget_minor, currency, message, source, utm jsonb, assigned_staff_id, follow_up_at, converted_booking_id, idempotency_key | Rate-limited creation |
 | `enquiry_messages` | enquiry_id, author_type, author_id, channel (`web`/`email`/`whatsapp`/`phone`/`internal`), visibility, body | |
 | `customer_interactions` | customer_user_id, staff_id, kind (`call`/`email`/`meeting`/`whatsapp`/`note`), summary, occurred_at, related_type/id | CRM timeline |
-| `consultation_services` | slug, name, duration_minutes, format options, price_minor (nullable), currency, is_active | |
-| `staff_availability` | staff_id, weekday, start_time, end_time, timezone | Weekly template |
+| `consultation_services` | slug, name, description, duration_minutes, formats[], price_minor (nullable), currency, is_active | |
+| `consultation_service_staff` | service_id, staff_id | Which staff can run which consultation |
+| `staff_availability` | staff_id, weekday (ISO 1–7), start_time, end_time, timezone | Weekly template in the staff member's timezone |
 | `availability_exceptions` | staff_id, starts_at, ends_at, kind (`off`/`extra`) | |
 | `consultations` | reference, service_id, customer_user_id, contact…, staff_id, starts_at, ends_at, timezone, format (`video`/`phone`/`in_person`), status (`requested`/`confirmed`/`rescheduled`/`cancelled`/`completed`/`no_show`), meeting_link, enquiry_id | Exclusion constraint: no overlapping confirmed consultations per staff (`tstzrange`) |
 | `support_tickets` | reference, customer_user_id, booking_id, subject, status (`open`/`pending`/`resolved`/`closed`), priority, assigned_staff_id | |
@@ -192,7 +193,7 @@ This document defines every table we plan to build, grouped by domain. For each 
 
 | Table | Key columns | Notes |
 |-------|-------------|-------|
-| `articles` | slug, title, excerpt, body, hero_media_id, author_staff_id, status, published_at, seo_title, seo_description, canonical_url | |
+| `articles` | slug, title, excerpt, body (safe text format), hero_media_id, author_staff_id, reviewed_at, reading_minutes, status, published_at, seo_title, seo_description | |
 | `article_destinations` | article_id, destination_id | Internal linking |
 | `pages` | slug, kind (`legal`/`landing`/`static`), title, body, status, published_at | |
 | `homepage_sections` | kind (`hero`/`collection`/`featured_packages`/`banner`/`text`), config jsonb, position, is_active, starts_at, ends_at | |

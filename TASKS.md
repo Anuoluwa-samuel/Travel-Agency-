@@ -62,11 +62,13 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[cfg]` built, awaiting
 - [x] Enquiry form → server action: validation, honeypot, rate limits (IP + email, hashed), idempotency (client key + content hash), reference, first message, acknowledgement email (best effort, only marked sent when delivered)
 - [x] Contact page with package/destination context; flights and hotels pages with an honest consultant-led fallback
 - [x] SEO: metadata, canonicals, noindex for filter/page combos, sitemap, robots, OG, JSON-LD (BreadcrumbList, TouristDestination, TouristTrip, FAQPage, TravelAgency), breadcrumbs, slug-redirect lookup
-- [ ] Consultation booking (internal scheduling, timezone-aware) → next
-- [ ] Travel guides/articles + CMS tables → next (with content admin)
-- [ ] Legal pages (terms, privacy, cookies) → need owner-approved text; links stay hidden until then
-- [ ] Playwright E2E for J01 (discover → enquire) and J18 (integration fallback)
-- [x] Tests: 105 passing (unit + integration); empty-catalogue build verified
+- [x] Consultation booking: services, staff eligibility, weekly hours and time off per consultant timezone, 12h notice, 21-day window, live slots, load-balanced assignment, DB exclusion constraint against double booking, idempotency, confirmation email; visitor's local time shown alongside Lagos time
+- [x] Travel guides: articles table, safe body format (no raw HTML), list + detail pages with table of contents, reviewed date, destination links both ways, sitemap
+- [ ] Legal pages (terms, privacy, cookies): need owner-approved text; links stay hidden until then
+- [ ] Guide/article editing UI → Phase 5 content admin
+- [x] Playwright E2E (25 tests, desktop + Pixel 7): J01 discover → enquire, package → request, filters, consultation booking, J18 fallbacks + 404s, guides/TOC, sitemap/robots/noindex, access control (signed-out, customer, booking agent, 2FA-required staff), no horizontal scroll on 7 key pages, mobile menu
+- [x] CI runs E2E against the production build
+- [x] Tests: 131 unit + integration, 25 E2E; empty-catalogue build verified
 
 ## Phase 4 — Booking & payments
 - [ ] Price rules engine + server quote calculation + quote expiry

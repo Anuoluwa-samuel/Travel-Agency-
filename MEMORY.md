@@ -4,7 +4,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Current state
 
-- **Phase:** 3 mostly complete on branch `phase-3/public-experience` (stacked on `phase-2/foundation`, PR #2 still open). Remaining in Phase 3: consultations, guides/CMS, legal pages, Playwright E2E.
+- **Phase:** 3 complete on branch `phase-3/public-experience` (stacked on `phase-2/foundation`, PR #2 still open, nothing from Phase 3 pushed). Only legal pages remain, blocked on owner-approved text. Next: Phase 4, booking & payments.
 - **Repo:** https://github.com/Anuoluwa-samuel/Travel-Agency- (was empty at start; fresh build)
 - **Local path:** `~/Downloads/travel agency`
 - **Default branch:** `main`
@@ -33,6 +33,10 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | 2026-10-15 | Destination tiles are typographic (no stock photos) until licensed photography is uploaded | DESIGN §6 |
 | 2026-10-15 | Enquiry idempotency: client UUID written on submit (React 19 resets uncontrolled fields after an action), server falls back to a content hash per 10-minute window | Phase 3 |
 | 2026-10-15 | Streamed `notFound()` returns HTTP 200 with `noindex` (Partial Prerendering); acceptable soft-404 | Phase 3 |
+| 2026-10-15 | Consultations are auto-confirmed against internal availability; double booking blocked by `consultations_no_overlap` (btree_gist exclusion constraint). Managed Postgres must allow the `btree_gist` extension | Phase 3 |
+| 2026-10-15 | Request-time pages that read the clock call `await connection()` first (Cache Components) | Phase 3 |
+| 2026-10-15 | Article bodies use a small safe format (## headings, lists, links, **bold**) rendered as React elements; links limited to site paths and http(s) | Phase 3 |
+| 2026-10-15 | E2E: own DB `orbis_e2e` reset by `tests/e2e/prepare-db.ts` inside the webServer command (Playwright starts webServer before globalSetup); port 3210 locally (3100 is used by another app); random seed password per run | Phase 3 |
 | 2026-10-15 | Typed routes off for now: nav config holds hrefs for unbuilt pages behind `live: false` | config/navigation.ts |
 | 2026-10-15 | Next.js App Router + TS + Tailwind + shadcn/ui | ARCHITECTURE §1 |
 | 2026-10-15 | PostgreSQL + Drizzle; pg-boss for jobs (no Redis in v1) | ADR-002, ADR-003 |
@@ -73,6 +77,13 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | Weather / flight status / advisories | not started |
 
 ## Phase log
+
+### Phase 3 (part 2) — 2026-10-15
+- Consultations: schema + exclusion constraint, slot engine (timezone/DST-aware, pure, tested), booking service with concurrency retry, pages, seed (3 services, staff hours).
+- Guides: articles schema, safe parser/renderer, list/detail pages, destination cross-links, 2 sample guides (labelled as sample content).
+- Playwright E2E: 25 tests on desktop + mobile; CI runs them against the production build.
+- Fixed during testing: booking page read the clock during prerender (`connection()`); link parser left a stray `)` for URLs with parentheses.
+- Tests: 131 unit/integration + 25 E2E, all passing.
 
 ### Phase 3 (part 1) — 2026-10-15
 - Catalogue service (published-only), from-price calculator, filters parsed from URL params.
