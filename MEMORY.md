@@ -57,7 +57,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 ## Phase log
 
 ### Phase 1 — 2026-10-15
-- Added `docs/data-model.md` (≈90 tables across 14 domains, conventions, indexes, retention), `docs/state-machines.md`, `docs/journeys.md` (J01–J18 + route map + navigation), `docs/integrations.md`, `docs/assumptions.md`.
+- Added `docs/data-model.md` (110 tables across 14 domains, conventions, indexes, retention), `docs/state-machines.md`, `docs/journeys.md` (J01–J18 + route map + navigation), `docs/integrations.md`, `docs/assumptions.md`.
 - Decisions: UUIDv7 PKs + random base32 public references; append-only enforced by DB triggers; passport/DOB encrypted at app level; consultation overlap blocked by a Postgres exclusion constraint; visa "completed" means service complete, not visa granted.
 - Tests: none (documentation phase).
 
