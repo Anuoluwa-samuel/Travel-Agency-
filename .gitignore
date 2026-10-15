@@ -1,0 +1,45 @@
+# Claude Code local workspace — never commit
+.claude/
+CLAUDE.local.md
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next.js / build output
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment and secrets (only .env.example is committed)
+.env
+.env.*
+!.env.example
+
+# Testing
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Local uploads / object storage emulation
+.storage/
+uploads/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Deployment
+.vercel/
