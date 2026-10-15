@@ -4,7 +4,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Current state
 
-- **Phase:** 2 complete on branch `phase-2/foundation`. Next: Phase 3, public travel experience.
+- **Phase:** 3 complete on branch `phase-3/public-experience` (stacked on `phase-2/foundation`, PR #2 still open, nothing from Phase 3 pushed). Only legal pages remain, blocked on owner-approved text. Next: Phase 4, booking & payments.
 - **Repo:** https://github.com/Anuoluwa-samuel/Travel-Agency- (was empty at start; fresh build)
 - **Local path:** `~/Downloads/travel agency`
 - **Default branch:** `main`
@@ -27,6 +27,16 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | 2026-10-15 | `cn` helper comes from shadcn's own `cn` package (replaces clsx + tailwind-merge) | components.json |
 | 2026-10-15 | Better Auth field names drive `users`/`sessions`/`accounts`/`verifications`/`two_factors`; `users.email_verified` is a boolean (not a timestamp as first drafted) | data-model §1 |
 | 2026-10-15 | Customers and signed-out visitors get a 404 on `/admin`; privileged staff without 2FA are sent to `/account/security?required=2fa` | RULES §5 |
+| 2026-10-15 | Catalogue reads live in `services/catalogue/queries.ts` with `use cache` + `cacheTag("catalogue")`; all date/price logic resolved there so pages never read the clock or compute prices | Phase 3 |
+| 2026-10-15 | `generateStaticParams` must return ≥1 param under Cache Components; `staticSlugParams()` falls back to a `__none` placeholder (404) when nothing is published | Phase 3 |
+| 2026-10-15 | Public package payload exposes only coarse availability (open/limited/closed), never seat counts or raw price rules | Phase 3 |
+| 2026-10-15 | Destination tiles are typographic (no stock photos) until licensed photography is uploaded | DESIGN §6 |
+| 2026-10-15 | Enquiry idempotency: client UUID written on submit (React 19 resets uncontrolled fields after an action), server falls back to a content hash per 10-minute window | Phase 3 |
+| 2026-10-15 | Streamed `notFound()` returns HTTP 200 with `noindex` (Partial Prerendering); acceptable soft-404 | Phase 3 |
+| 2026-10-15 | Consultations are auto-confirmed against internal availability; double booking blocked by `consultations_no_overlap` (btree_gist exclusion constraint). Managed Postgres must allow the `btree_gist` extension | Phase 3 |
+| 2026-10-15 | Request-time pages that read the clock call `await connection()` first (Cache Components) | Phase 3 |
+| 2026-10-15 | Article bodies use a small safe format (## headings, lists, links, **bold**) rendered as React elements; links limited to site paths and http(s) | Phase 3 |
+| 2026-10-15 | E2E: own DB `orbis_e2e` reset by `tests/e2e/prepare-db.ts` inside the webServer command (Playwright starts webServer before globalSetup); port 3210 locally (3100 is used by another app); random seed password per run | Phase 3 |
 | 2026-10-15 | Typed routes off for now: nav config holds hrefs for unbuilt pages behind `live: false` | config/navigation.ts |
 | 2026-10-15 | Next.js App Router + TS + Tailwind + shadcn/ui | ARCHITECTURE §1 |
 | 2026-10-15 | PostgreSQL + Drizzle; pg-boss for jobs (no Redis in v1) | ADR-002, ADR-003 |
@@ -67,6 +77,21 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | Weather / flight status / advisories | not started |
 
 ## Phase log
+
+### Phase 3 (part 2) — 2026-10-15
+- Consultations: schema + exclusion constraint, slot engine (timezone/DST-aware, pure, tested), booking service with concurrency retry, pages, seed (3 services, staff hours).
+- Guides: articles schema, safe parser/renderer, list/detail pages, destination cross-links, 2 sample guides (labelled as sample content).
+- Playwright E2E: 25 tests on desktop + mobile; CI runs them against the production build.
+- Fixed during testing: booking page read the clock during prerender (`connection()`); link parser left a stray `)` for URLs with parentheses.
+- Tests: 131 unit/integration + 25 E2E, all passing.
+
+### Phase 3 (part 1) — 2026-10-15
+- Catalogue service (published-only), from-price calculator, filters parsed from URL params.
+- Pages: homepage, /destinations (+ detail), /packages (+ detail), /contact, /flights, /hotels, sitemap.
+- Enquiries table + service + server action with rate limiting, honeypot and idempotency; acknowledgement email via provider adapter.
+- CI now seeds fictional data before the build.
+- Tests: 105 pass. Browser: filters, package page, enquiry error → fix → success (client key reused), mobile 375px no horizontal scroll, filters collapse on phones.
+- Fixed during testing: package page read the clock during prerender; enquiry key cleared by React form reset; confirmation not scrolled into view; cramped two-column contact layout.
 
 ### Phase 2 — 2026-10-15
 - Scaffolded Next.js 16.4 + Tailwind 4 + shadcn/ui; ORBIS tokens, fonts, logo, core and feedback components.

@@ -10,11 +10,12 @@ import { appendFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { hashPassword } from "better-auth/crypto";
 import { config } from "dotenv";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { PERMISSIONS, ROLES } from "@/server/auth/permissions";
 import * as s from "@/server/db/schema";
+import { readingMinutes } from "@/lib/content/parse";
 import * as data from "./data";
 
 config({ path: ".env.local", quiet: true });
@@ -218,17 +219,15 @@ async function seedPackage(db: SeedDb) {
           dinner: day.d,
         })
         .returning({ id: s.itineraryDays.id });
-      await tx
-        .insert(s.itineraryItems)
-        .values(
-          day.items.map((it, i) => ({
-            itineraryDayId: d.id,
-            kind: it.kind,
-            title: it.title,
-            isOptional: "optional" in it ? it.optional : false,
-            position: i,
-          })),
-        );
+      await tx.insert(s.itineraryItems).values(
+        day.items.map((it, i) => ({
+          itineraryDayId: d.id,
+          kind: it.kind,
+          title: it.title,
+          isOptional: "optional" in it ? it.optional : false,
+          position: i,
+        })),
+      );
     }
 
     await tx
@@ -255,18 +254,16 @@ async function seedPackage(db: SeedDb) {
       .returning({ id: s.packageOptions.id, code: s.packageOptions.code });
     const optId = new Map(opts.map((o) => [o.code, o.id]));
 
-    await tx
-      .insert(s.priceRules)
-      .values(
-        pkg.prices.map((pr) => ({
-          packageId: p.id,
-          optionId: optId.get(pr.option)!,
-          travellerType: pr.traveller,
-          amountMinor: pr.amount,
-          currency: "NGN",
-          note: "Fictional seed price",
-        })),
-      );
+    await tx.insert(s.priceRules).values(
+      pkg.prices.map((pr) => ({
+        packageId: p.id,
+        optionId: optId.get(pr.option)!,
+        travellerType: pr.traveller,
+        amountMinor: pr.amount,
+        currency: "NGN",
+        note: "Fictional seed price",
+      })),
+    );
 
     for (const dep of pkg.departures) {
       const start = new Date(now.getTime() + dep.offsetDays * 86_400_000);
@@ -285,6 +282,73 @@ async function seedPackage(db: SeedDb) {
       .insert(s.paymentPlans)
       .values({ packageId: p.id, depositBasisPoints: 3000, balanceDueDaysBefore: 45, currency: "NGN" });
   });
+}
+
+async function seedConsultations(db: SeedDb) {
+  const staffRows = await db
+    .select({ userId: s.staffRoles.userId, role: s.roles.key })
+    .from(s.staffRoles)
+    .innerJoin(s.roles, eq(s.roles.id, s.staffRoles.roleId));
+  const staffFor = (roles: readonly string[]) => staffRows.filter((r) => roles.includes(r.role)).map((r) => r.userId);
+
+  for (const [i, svc] of data.consultationServices.entries()) {
+    const [row] = await db
+      .insert(s.consultationServices)
+      .values({
+        slug: svc.slug,
+        name: svc.name,
+        description: svc.description,
+        durationMinutes: svc.durationMinutes,
+        formats: [...svc.formats],
+        position: i,
+      })
+      .onConflictDoNothing({ target: s.consultationServices.slug })
+      .returning({ id: s.consultationServices.id });
+    if (!row) continue;
+    const staffIds = staffFor(svc.staffRoles);
+    if (staffIds.length)
+      await db.insert(s.consultationServiceStaff).values(staffIds.map((staffId) => ({ serviceId: row.id, staffId })));
+  }
+
+  for (const [role, hours] of Object.entries(data.staffHours)) {
+    for (const staffId of staffFor([role])) {
+      const existing = await db
+        .select({ id: s.staffAvailability.id })
+        .from(s.staffAvailability)
+        .where(eq(s.staffAvailability.staffId, staffId));
+      if (existing.length) continue;
+      await db
+        .insert(s.staffAvailability)
+        .values(hours.weekdays.map((weekday) => ({ staffId, weekday, startTime: hours.start, endTime: hours.end })));
+    }
+  }
+}
+
+async function seedArticles(db: SeedDb) {
+  const now = new Date();
+  for (const a of data.sampleArticles) {
+    const [row] = await db
+      .insert(s.articles)
+      .values({
+        slug: a.slug,
+        title: a.title,
+        excerpt: a.excerpt,
+        body: a.body,
+        readingMinutes: readingMinutes(a.body),
+        status: "published",
+        publishedAt: now,
+        reviewedAt: now,
+      })
+      .onConflictDoNothing({ target: s.articles.slug })
+      .returning({ id: s.articles.id });
+    if (!row || a.destinations.length === 0) continue;
+    const dests = await db
+      .select({ id: s.destinations.id })
+      .from(s.destinations)
+      .where(inArray(s.destinations.slug, [...a.destinations]));
+    if (dests.length)
+      await db.insert(s.articleDestinations).values(dests.map((d) => ({ articleId: row.id, destinationId: d.id })));
+  }
 }
 
 async function seedSettings(db: SeedDb) {
@@ -309,6 +373,8 @@ export async function seed(url: string) {
     await seedGeography(db);
     await seedDestinations(db);
     await seedPackage(db);
+    await seedConsultations(db);
+    await seedArticles(db);
     await seedSettings(db);
   } finally {
     await client.end();

@@ -7,14 +7,16 @@ import { formatMoney, type Money } from "@/lib/money";
  * - `configured`: a price or estimate maintained by ORBIS staff
  * - `ai`: an AI planning estimate
  * - `quote`: a server-calculated quote the customer can accept
+ * - `package`: ORBIS's published package price; final amount is confirmed in the quote
  */
-export type PriceSource = "supplier" | "configured" | "ai" | "quote";
+export type PriceSource = "supplier" | "configured" | "ai" | "quote" | "package";
 
 const sourceLabel: Record<PriceSource, string> = {
   supplier: "Supplier price",
   configured: "Estimate",
   ai: "AI estimate",
   quote: "Quoted price",
+  package: "Confirmed when quoted",
 };
 
 export function PriceTag({

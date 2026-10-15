@@ -22,6 +22,34 @@
       "when": 1792059932411,
       "tag": "0002_auth_rate_limits",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792061533469,
+      "tag": "0003_enquiries",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792062754656,
+      "tag": "0004_consultations",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792062755557,
+      "tag": "0005_consultations_no_overlap",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792063014764,
+      "tag": "0006_articles",
+      "breakpoints": true
     }
   ]
 }

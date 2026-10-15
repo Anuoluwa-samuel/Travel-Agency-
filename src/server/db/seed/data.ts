@@ -289,3 +289,102 @@ export const demoCustomer = { name: "Demo Traveller", email: "traveller@orbis.ex
 
 /** `.example` is a reserved TLD (RFC 2606): these addresses can never reach a real inbox. */
 export const staffEmail = (role: string) => `${role.replace(/_/g, "-")}@orbis.example`;
+
+/** Consultation types and who runs them. Fictional working hours, Africa/Lagos. */
+export const consultationServices = [
+  {
+    slug: "trip-planning-call",
+    name: "Trip planning call",
+    description:
+      "Talk through destinations, dates and budget with a consultant. Leave with a clear shortlist and next steps.",
+    durationMinutes: 30,
+    formats: ["video", "phone"],
+    staffRoles: ["travel_consultant", "ops_manager"],
+  },
+  {
+    slug: "honeymoon-planning",
+    name: "Honeymoon and special occasion planning",
+    description:
+      "A longer session for honeymoons, anniversaries and milestone trips, covering pacing, stays and surprises.",
+    durationMinutes: 45,
+    formats: ["video", "in_person"],
+    staffRoles: ["travel_consultant"],
+  },
+  {
+    slug: "visa-document-review",
+    name: "Visa document review",
+    description:
+      "Go through your document checklist with a visa officer before you apply. We help you prepare; the embassy makes the decision.",
+    durationMinutes: 45,
+    formats: ["video", "in_person"],
+    staffRoles: ["visa_officer"],
+  },
+] as const;
+
+/** ISO weekdays and hours per role (fictional). */
+export const staffHours = {
+  travel_consultant: { weekdays: [1, 2, 3, 4, 5], start: "09:00", end: "17:00" },
+  ops_manager: { weekdays: [1, 3, 5], start: "10:00", end: "14:00" },
+  visa_officer: { weekdays: [2, 4], start: "10:00", end: "15:00" },
+} as const;
+
+/**
+ * Sample guides for development. General, evergreen advice only: no prices, fares or entry
+ * rules, because those must come from checked sources. Replace before launch.
+ */
+export const sampleArticles = [
+  {
+    slug: "how-to-budget-for-your-first-international-trip",
+    title: "How to budget for your first international trip",
+    excerpt:
+      "A simple way to estimate the full cost of a trip before you book, so there are no surprises at the airport or the hotel desk.",
+    destinations: [] as string[],
+    body: `**Sample guide for development.** Replace with reviewed content before launch.
+
+## Start with the fixed costs
+Flights and accommodation are usually the largest parts of a trip budget, and the easiest to pin down. Get real quotes for your dates before estimating anything else.
+
+- Flights, including checked bags if you need them
+- Accommodation for every night, including taxes and resort fees
+- Airport transfers at both ends
+
+## Add daily spending
+For food, local transport and small purchases, think in a daily amount per person and multiply by the number of days. Our [destination pages](/destinations) show planning estimates for this.
+
+## Remember the easy-to-forget items
+1. Visa application fees and any document costs
+2. Travel insurance
+3. Activities and excursions you've set your heart on
+4. A contingency buffer, typically 10 to 15 percent
+
+## Check how you'll pay
+Card fees and exchange rates change what you actually spend. Ask your bank about international card charges before you travel.
+
+Want a second pair of eyes on your numbers? [Book a free planning call](/consultations/trip-planning-call).`,
+  },
+  {
+    slug: "beach-holiday-packing-checklist",
+    title: "A packing checklist for a beach holiday",
+    excerpt: "What to bring for a relaxed week by the sea, from documents to reef-safe sunscreen.",
+    destinations: ["zanzibar", "cape-town"],
+    body: `**Sample guide for development.** Replace with reviewed content before launch.
+
+## Documents first
+- Passport, valid well beyond your return date
+- Printed and digital copies of bookings and insurance
+- Any visa or entry documents your trip requires
+
+## Clothing
+- Light, breathable layers and something warmer for evenings
+- Swimwear and a cover-up for beach bars and towns
+- Modest clothing for religious sites and conservative areas
+
+## Health and comfort
+- Sunscreen, a hat and sunglasses
+- Insect repellent
+- Any regular medication, in original packaging
+
+## Before you leave
+Check your airline's baggage allowance and keep valuables in your carry-on. If anything changes with your plans, [let us know](/contact).`,
+  },
+] as const;
