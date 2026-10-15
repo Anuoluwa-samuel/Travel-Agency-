@@ -4,13 +4,14 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Current state
 
-- **Phase:** 0 complete (planning docs). Next: Phase 1, discovery & architecture.
+- **Phase:** 1 complete (discovery & architecture docs on branch `phase-1/discovery-architecture`). Next: Phase 2, design system & foundation.
 - **Repo:** https://github.com/Anuoluwa-samuel/Travel-Agency- (was empty at start; fresh build)
 - **Local path:** `~/Downloads/travel agency`
 - **Default branch:** `main`
 
 ## Fixed requirements from the owner
 
+- Brand name: **ORBIS**.
 - Primary colours: Deep Navy `#0B2545`, Champagne Gold `#D6A85C`, Cloud White `#F7F8FA`.
 - `.claude/` must never be committed or pushed (in `.gitignore`).
 - Planning docs (PRD, ARCHITECTURE, RULES, DESIGN, TASKS, MEMORY) were created before Phase 1.
@@ -26,7 +27,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | 2026-10-15 | All external services behind capability adapters; unconfigured → honest fallback | ADR-005 |
 | 2026-10-15 | Better Auth, staff 2FA for finance/admin | ADR-006 |
 | 2026-10-15 | Paystack first payment provider; NGN base currency; Africa/Lagos timezone | PRD §11 |
-| 2026-10-15 | Placeholder brand name "Voyagr" (replaceable via settings) | DESIGN §9 |
+| 2026-10-15 | Brand name is **ORBIS** (owner-confirmed; still editable via settings) | DESIGN §9 |
 | 2026-10-15 | Gold `#D6A85C` is not used for text on light backgrounds (contrast 2.1:1); use gold-700 `#8C6A2E` | DESIGN §1 |
 
 ## Assumptions to confirm with the owner
@@ -55,6 +56,11 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | Weather / flight status / advisories | not started |
 
 ## Phase log
+
+### Phase 1 — 2026-10-15
+- Added `docs/data-model.md` (110 tables across 14 domains, conventions, indexes, retention), `docs/state-machines.md`, `docs/journeys.md` (J01–J18 + route map + navigation), `docs/integrations.md`, `docs/assumptions.md`.
+- Decisions: UUIDv7 PKs + random base32 public references; append-only enforced by DB triggers; passport/DOB encrypted at app level; consultation overlap blocked by a Postgres exclusion constraint; visa "completed" means service complete, not visa granted.
+- Tests: none (documentation phase).
 
 ### Phase 0 — 2026-10-15
 - Created local folder, cloned empty repo, added `.gitignore` (excludes `.claude/`).

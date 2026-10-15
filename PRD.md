@@ -1,6 +1,6 @@
 # Product Requirements Document
 
-**Product:** International Travel Agency & Smart Travel Platform (working name — brand is configurable)
+**Product:** ORBIS — International Travel Agency & Smart Travel Platform (brand settings remain configurable)
 **Status:** Draft v0.1 · 2026-10-15
 **Primary market:** Nigeria (NGN base), serving international customers (USD, GBP, EUR display)
 
@@ -108,7 +108,7 @@ Centralized service: email + in-app (WhatsApp/SMS optional adapters). Template-d
 
 ## 9. Brand (configurable)
 
-- Name, logo, domain, contact details: placeholders in settings until supplied.
+- Name: **ORBIS**. Logo, domain, contact details: placeholders in settings until supplied.
 - Primary palette: **Deep Navy `#0B2545`**, **Champagne Gold `#D6A85C`**, **Cloud White `#F7F8FA`**. See `DESIGN.md`.
 
 ## 10. Success criteria for launch

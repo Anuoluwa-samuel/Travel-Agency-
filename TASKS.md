@@ -21,17 +21,16 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[cfg]` built, awaiting
 - [x] Create `Downloads/travel agency` and clone `Anuoluwa-samuel/Travel-Agency-` (empty repo → fresh build)
 - [x] `.gitignore` excluding `.claude/`, `.env*`, build output
 - [x] PRD.md, ARCHITECTURE.md, RULES.md, DESIGN.md, TASKS.md, MEMORY.md
-- [ ] Initial commit and push to `main`
+- [x] Initial commit and push to `main`
 
 ## Phase 1 — Discovery & architecture
-- [ ] Full ERD (all entities from master brief §20) with ownership, lifecycle, constraints → `docs/data-model.md`
-- [ ] Booking state machine per booking type → `docs/booking-states.md`
-- [ ] Visa case, enquiry, group, content state definitions
-- [ ] User journey maps for the 18 E2E journeys → `docs/journeys.md`
-- [ ] Final route map + navigation structure (public, account, admin)
-- [ ] Confirm permission matrix (RULES.md §5)
-- [ ] Integration inventory + credentials list → `docs/integrations.md`
-- [ ] Configurable assumptions register (brand, currency, deposit %, timezone, tax)
+- [x] Full data model (all entities from master brief §20) with ownership, lifecycle, constraints → `docs/data-model.md`
+- [x] Booking, quote, payment, refund, enquiry, consultation, visa, content, group state machines → `docs/state-machines.md`
+- [x] 18 core user journeys mapped to routes + server checks → `docs/journeys.md`
+- [x] Final route map + navigation structure (public, account, admin) → `docs/journeys.md`
+- [x] Permission matrix confirmed (RULES.md §5; per-route permissions in `docs/journeys.md`)
+- [x] Integration inventory + launch credentials checklist → `docs/integrations.md`
+- [x] Configurable assumptions register → `docs/assumptions.md`
 
 ## Phase 2 — Design system & foundation
 - [ ] Scaffold Next.js (App Router, TS strict), pnpm, ESLint, Prettier, Vitest, Playwright
