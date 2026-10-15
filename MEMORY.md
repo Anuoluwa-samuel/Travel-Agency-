@@ -11,6 +11,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Fixed requirements from the owner
 
+- Brand name: **ORBIS**.
 - Primary colours: Deep Navy `#0B2545`, Champagne Gold `#D6A85C`, Cloud White `#F7F8FA`.
 - `.claude/` must never be committed or pushed (in `.gitignore`).
 - Planning docs (PRD, ARCHITECTURE, RULES, DESIGN, TASKS, MEMORY) were created before Phase 1.
@@ -26,7 +27,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | 2026-10-15 | All external services behind capability adapters; unconfigured → honest fallback | ADR-005 |
 | 2026-10-15 | Better Auth, staff 2FA for finance/admin | ADR-006 |
 | 2026-10-15 | Paystack first payment provider; NGN base currency; Africa/Lagos timezone | PRD §11 |
-| 2026-10-15 | Placeholder brand name "Voyagr" (replaceable via settings) | DESIGN §9 |
+| 2026-10-15 | Brand name is **ORBIS** (owner-confirmed; still editable via settings) | DESIGN §9 |
 | 2026-10-15 | Gold `#D6A85C` is not used for text on light backgrounds (contrast 2.1:1); use gold-700 `#8C6A2E` | DESIGN §1 |
 
 ## Assumptions to confirm with the owner

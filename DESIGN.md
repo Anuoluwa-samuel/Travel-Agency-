@@ -105,7 +105,7 @@ Warm, clear and specific. Say what will happen ("We'll confirm availability with
 
 ## 9. Brand configuration
 
-`src/config/brand.ts` + admin settings: name, logo (light/dark), favicon, contact email/phone/WhatsApp, address, social links, legal entity, default currency, timezone. Placeholder brand: **"Voyagr"** (working name, replaceable) with a simple wordmark in Fraunces and a gold compass-point glyph.
+`src/config/brand.ts` + admin settings: name, logo (light/dark), favicon, contact email/phone/WhatsApp, address, social links, legal entity, default currency, timezone. Brand name: **ORBIS** (owner-confirmed). Wordmark set in Fraunces, uppercase with open tracking, plus a gold compass-point glyph.
 
 ## 10. Accessibility checklist
 

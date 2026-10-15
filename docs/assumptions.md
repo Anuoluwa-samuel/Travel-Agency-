@@ -6,7 +6,7 @@ Every default here is a reversible choice we made because the information wasn't
 
 | Key | Default | Where it lives | Confirmed |
 |-----|---------|----------------|:-:|
-| `brand.name` | "Voyagr" (placeholder) | settings | – |
+| `brand.name` | "ORBIS" | settings | ✓ |
 | `brand.logo` | Text wordmark + gold compass glyph | settings / media | – |
 | `brand.colors` | Navy `#0B2545`, Gold `#D6A85C`, Cloud `#F7F8FA` | design tokens | ✓ |
 | `contact.email/phone/whatsapp/address` | Empty → hidden in UI until set | settings | – |
