@@ -4,7 +4,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Current state
 
-- **Phase:** 0 complete (planning docs). Next: Phase 1, discovery & architecture.
+- **Phase:** 1 complete (discovery & architecture docs on branch `phase-1/discovery-architecture`). Next: Phase 2, design system & foundation.
 - **Repo:** https://github.com/Anuoluwa-samuel/Travel-Agency- (was empty at start; fresh build)
 - **Local path:** `~/Downloads/travel agency`
 - **Default branch:** `main`
@@ -55,6 +55,11 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | Weather / flight status / advisories | not started |
 
 ## Phase log
+
+### Phase 1 — 2026-10-15
+- Added `docs/data-model.md` (≈90 tables across 14 domains, conventions, indexes, retention), `docs/state-machines.md`, `docs/journeys.md` (J01–J18 + route map + navigation), `docs/integrations.md`, `docs/assumptions.md`.
+- Decisions: UUIDv7 PKs + random base32 public references; append-only enforced by DB triggers; passport/DOB encrypted at app level; consultation overlap blocked by a Postgres exclusion constraint; visa "completed" means service complete, not visa granted.
+- Tests: none (documentation phase).
 
 ### Phase 0 — 2026-10-15
 - Created local folder, cloned empty repo, added `.gitignore` (excludes `.claude/`).
