@@ -33,18 +33,25 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[cfg]` built, awaiting
 - [x] Configurable assumptions register → `docs/assumptions.md`
 
 ## Phase 2 — Design system & foundation
-- [ ] Scaffold Next.js (App Router, TS strict), pnpm, ESLint, Prettier, Vitest, Playwright
-- [ ] `env.ts` validated config; `.env.example`
-- [ ] Tailwind tokens from DESIGN.md; fonts (Fraunces, Inter); shadcn/ui themed
-- [ ] Core components: Button, inputs, DatePicker, TravellerPicker, Badge, PriceTag, EmptyState, ErrorState, Skeleton, DataTable, Timeline, Toasts
-- [ ] Layouts: public header/footer (responsive nav), account shell, admin shell
-- [ ] Brand config + settings table
-- [ ] Postgres via Docker Compose; Drizzle schema for identity, catalogue, platform; first migrations
-- [ ] Better Auth: sign up, verify email, sign in, reset, sessions, staff 2FA
-- [ ] RBAC: roles, permissions, `requireUser` / `requireStaff` / `assertCanAccess`
-- [ ] Logger with PII redaction, error boundaries, request IDs, audit log service
-- [ ] Money + reference + idempotency libs with unit tests
-- [ ] Seed script (fictional data)
+- [x] Scaffold Next.js 16 (App Router, Cache Components, TS strict), pnpm, ESLint, Prettier, Vitest
+- [~] Playwright installed; config and E2E journeys land with the flows they test (Phase 3+)
+- [x] `env.ts` validated config (`APP_ENV` tiers); `.env.example`
+- [x] Tailwind tokens from DESIGN.md; fonts (Fraunces, Inter); shadcn/ui (Radix) themed; 44px touch targets
+- [x] Core components: Button (+ gold accent), inputs, Badge, StatusBadge, SimulatedDataBadge, PriceTag, EmptyState, ErrorState, Skeleton, Toasts, TextField, FormAlert
+- [ ] Domain components moved to the phase that first uses them: DatePicker + TravellerPicker (Phase 3), DataTable + Timeline (Phase 4/5)
+- [x] Layouts: public header/footer (responsive, live-links-only nav), account shell, admin shell (permission-filtered)
+- [x] Brand config (ORBIS) + `settings` table
+- [x] Postgres via Docker Compose (port 5544); Drizzle schema for identity, catalogue, platform; 3 migrations; append-only trigger on `audit_logs`
+- [x] Better Auth: sign up, verify email, sign in, reset password, change password, sessions, TOTP 2FA + backup codes, DB rate limits
+- [x] RBAC: roles, permissions, `requireUser` / `requireStaff` (enforces 2FA for privileged roles) / `assertCanAccess`
+- [x] Logger with PII redaction, error boundary, 404 page
+- [ ] Request IDs + audit log write service (table and trigger exist; service lands with the first audited action in Phase 4)
+- [x] Money (bigint minor units, banker's rounding, allocation, FX), reference and UUIDv7 libs with unit tests
+- [ ] Idempotency helper (table exists; built with booking/payment in Phase 4)
+- [x] Seed script (fictional data, idempotent, refuses to run in staging/production)
+- [x] Security headers + CSP baseline; Proxy redirect for signed-out visitors; robots.txt
+- [x] Tests: 57 unit + 16 integration passing; production build passing
+- [x] GitHub Actions CI: lint, typecheck, tests (Postgres service), migrations, build on every PR
 
 ## Phase 3 — Public travel experience
 - [ ] Homepage (hero, search, curated collections, featured packages, trust content — no fabricated claims)
