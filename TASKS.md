@@ -54,15 +54,19 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[cfg]` built, awaiting
 - [x] GitHub Actions CI: lint, typecheck, tests (Postgres service), migrations, build on every PR
 
 ## Phase 3 — Public travel experience
-- [ ] Homepage (hero, search, curated collections, featured packages, trust content — no fabricated claims)
-- [ ] Destination listing: search, multi-filter, sort, pagination, reset, empty state
-- [ ] Destination detail pages (SSG/ISR)
-- [ ] Package listing + detail (structured itinerary, inclusions, departures, options, terms, FAQs)
-- [ ] Enquiry form + reference + acknowledgement email
-- [ ] Consultation booking (internal scheduling, timezone-aware)
-- [ ] Contact, FAQs, legal pages, guides/articles
-- [ ] SEO: metadata, canonicals, sitemap, robots, OG, JSON-LD where accurate, breadcrumbs, redirects
-- [ ] Flights/hotels pages with honest enquiry fallback when unconfigured
+- [x] Homepage: search, featured destinations, collections, featured packages, services (no fabricated reviews, awards or counts)
+- [x] Destination listing: search, region, travel style (any-of), month, budget tier, trip length, sort, pagination, reset, empty state; works without JavaScript
+- [x] Destination detail pages (ISR via Cache Components): overview, sections, best time, suggested stay, budget estimate with source and date, entry guidance only when sourced, packages, FAQs, related
+- [x] Package listing + detail: structured itinerary, inclusions/exclusions, stays, departures with per-room prices and coarse availability, add-ons, payment plan, cancellation terms, FAQs
+- [x] Server-side "from" price using the same rule precedence the quote engine will use
+- [x] Enquiry form → server action: validation, honeypot, rate limits (IP + email, hashed), idempotency (client key + content hash), reference, first message, acknowledgement email (best effort, only marked sent when delivered)
+- [x] Contact page with package/destination context; flights and hotels pages with an honest consultant-led fallback
+- [x] SEO: metadata, canonicals, noindex for filter/page combos, sitemap, robots, OG, JSON-LD (BreadcrumbList, TouristDestination, TouristTrip, FAQPage, TravelAgency), breadcrumbs, slug-redirect lookup
+- [ ] Consultation booking (internal scheduling, timezone-aware) → next
+- [ ] Travel guides/articles + CMS tables → next (with content admin)
+- [ ] Legal pages (terms, privacy, cookies) → need owner-approved text; links stay hidden until then
+- [ ] Playwright E2E for J01 (discover → enquire) and J18 (integration fallback)
+- [x] Tests: 105 passing (unit + integration); empty-catalogue build verified
 
 ## Phase 4 — Booking & payments
 - [ ] Price rules engine + server quote calculation + quote expiry

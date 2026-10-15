@@ -17,8 +17,10 @@ export interface NavGroup {
 }
 
 export const primaryNav: (NavItem | NavGroup)[] = [
-  { label: "Destinations", href: "/destinations", live: false },
-  { label: "Packages", href: "/packages", live: false },
+  { label: "Destinations", href: "/destinations", live: true },
+  { label: "Packages", href: "/packages", live: true },
+  { label: "Flights", href: "/flights", live: true },
+  { label: "Hotels", href: "/hotels", live: true },
   {
     label: "Plan a trip",
     items: [
@@ -34,15 +36,17 @@ export const primaryNav: (NavItem | NavGroup)[] = [
     ],
   },
   { label: "Guides", href: "/guides", live: false },
-  { label: "Contact", href: "/contact", live: false },
+  { label: "Contact", href: "/contact", live: true },
 ];
 
 export const footerNav: NavGroup[] = [
   {
     label: "Travel",
     items: [
-      { label: "Destinations", href: "/destinations", live: false },
-      { label: "Packages", href: "/packages", live: false },
+      { label: "Destinations", href: "/destinations", live: true },
+      { label: "Packages", href: "/packages", live: true },
+      { label: "Flights", href: "/flights", live: true },
+      { label: "Hotels", href: "/hotels", live: true },
       { label: "Guides", href: "/guides", live: false },
     ],
   },
@@ -59,7 +63,7 @@ export const footerNav: NavGroup[] = [
     label: "Help",
     items: [
       { label: "Find a booking", href: "/booking/lookup", live: false },
-      { label: "Contact us", href: "/contact", live: false },
+      { label: "Contact us", href: "/contact", live: true },
       { label: "Your account", href: "/account", live: true },
     ],
   },

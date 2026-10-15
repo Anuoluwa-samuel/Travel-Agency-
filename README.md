@@ -2,7 +2,7 @@
 
 ORBIS is a full travel business platform: a public site, packages and bookings, a customer portal, planning tools and an operations back office. It is built for an agency based in Nigeria that serves international customers.
 
-> **Status:** Phase 2 (foundation) is done. See [TASKS.md](TASKS.md) for what is built and what comes next.
+> **Status:** Phases 0–2 done; Phase 3 (public site, catalogue, enquiries) mostly done. See [TASKS.md](TASKS.md).
 
 ## Documentation
 

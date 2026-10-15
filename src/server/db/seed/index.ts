@@ -218,17 +218,15 @@ async function seedPackage(db: SeedDb) {
           dinner: day.d,
         })
         .returning({ id: s.itineraryDays.id });
-      await tx
-        .insert(s.itineraryItems)
-        .values(
-          day.items.map((it, i) => ({
-            itineraryDayId: d.id,
-            kind: it.kind,
-            title: it.title,
-            isOptional: "optional" in it ? it.optional : false,
-            position: i,
-          })),
-        );
+      await tx.insert(s.itineraryItems).values(
+        day.items.map((it, i) => ({
+          itineraryDayId: d.id,
+          kind: it.kind,
+          title: it.title,
+          isOptional: "optional" in it ? it.optional : false,
+          position: i,
+        })),
+      );
     }
 
     await tx
@@ -255,18 +253,16 @@ async function seedPackage(db: SeedDb) {
       .returning({ id: s.packageOptions.id, code: s.packageOptions.code });
     const optId = new Map(opts.map((o) => [o.code, o.id]));
 
-    await tx
-      .insert(s.priceRules)
-      .values(
-        pkg.prices.map((pr) => ({
-          packageId: p.id,
-          optionId: optId.get(pr.option)!,
-          travellerType: pr.traveller,
-          amountMinor: pr.amount,
-          currency: "NGN",
-          note: "Fictional seed price",
-        })),
-      );
+    await tx.insert(s.priceRules).values(
+      pkg.prices.map((pr) => ({
+        packageId: p.id,
+        optionId: optId.get(pr.option)!,
+        travellerType: pr.traveller,
+        amountMinor: pr.amount,
+        currency: "NGN",
+        note: "Fictional seed price",
+      })),
+    );
 
     for (const dep of pkg.departures) {
       const start = new Date(now.getTime() + dep.offsetDays * 86_400_000);

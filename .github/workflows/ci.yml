@@ -60,6 +60,7 @@ jobs:
         run: |
           echo "BETTER_AUTH_SECRET=$(openssl rand -base64 48)" >> "$GITHUB_ENV"
           echo "DATA_ENCRYPTION_KEY=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+          echo "SEED_DEMO_PASSWORD=$(openssl rand -base64 18)" >> "$GITHUB_ENV"
 
       - name: Create test database
         run: psql "postgres://orbis@localhost:5432/orbis" -c "CREATE DATABASE orbis_test OWNER orbis;"
@@ -78,6 +79,10 @@ jobs:
 
       - name: Apply migrations to a clean database
         run: pnpm db:migrate
+
+      # Fictional seed data so the build prerenders real catalogue pages.
+      - name: Seed demo data
+        run: pnpm db:seed
 
       - name: Build
         run: pnpm build
