@@ -26,6 +26,9 @@ export function SiteHeader() {
           )}
         </nav>
         <div className="flex items-center gap-2">
+          <Button asChild variant="accent" className="hidden sm:inline-flex">
+            <Link href="/contact">Plan a trip</Link>
+          </Button>
           <Suspense fallback={<div className="h-11 w-24" aria-hidden="true" />}>
             <AccountAction />
           </Suspense>
