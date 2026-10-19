@@ -154,8 +154,7 @@ async function seedDestinations(db: SeedDb) {
   }
 }
 
-async function seedPackage(db: SeedDb) {
-  const pkg = data.demoPackage;
+async function seedPackage(db: SeedDb, pkg: (typeof data.demoPackages)[number]) {
   const existing = await db.select({ id: s.packages.id }).from(s.packages).where(eq(s.packages.slug, pkg.slug));
   if (existing[0]) return;
 
@@ -372,7 +371,7 @@ export async function seed(url: string) {
     await seedUsers(db, roleIds);
     await seedGeography(db);
     await seedDestinations(db);
-    await seedPackage(db);
+    for (const pkg of data.demoPackages) await seedPackage(db, pkg);
     await seedConsultations(db);
     await seedArticles(db);
     await seedSettings(db);

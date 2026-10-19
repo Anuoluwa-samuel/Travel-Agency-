@@ -308,15 +308,29 @@ async function PackageDetail({ params }: { params: Promise<{ slug: string }> }) 
             )}
             <p className="text-sm leading-relaxed text-muted-foreground">
               {p.bookingMode === "instant"
-                ? "Secure online booking for this package is coming soon. Send a request and we'll hold your place while we confirm."
-                : "Send a request with your dates and travellers. We confirm availability and the final price with our partners before you pay anything."}
+                ? "Choose your dates and rooms, then pay a deposit online to secure your places."
+                : p.bookingMode === "request"
+                  ? "Send a request with your dates and travellers. We confirm availability with our partners before you pay anything."
+                  : "A consultant prices this trip for your dates and group."}
             </p>
-            <Button asChild size="lg">
-              <Link href={enquireHref}>
-                {bookingModeLabel[p.bookingMode === "instant" ? "request" : p.bookingMode]}{" "}
-                <ArrowRight data-icon="inline-end" />
-              </Link>
-            </Button>
+            {p.bookingMode === "enquiry" ? (
+              <Button asChild size="lg">
+                <Link href={enquireHref}>
+                  {bookingModeLabel.enquiry} <ArrowRight data-icon="inline-end" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild size="lg">
+                  <Link href={`/packages/${p.slug}/book`}>
+                    {p.bookingMode === "instant" ? "Book now" : "Request to book"} <ArrowRight data-icon="inline-end" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href={enquireHref}>Ask a question first</Link>
+                </Button>
+              </>
+            )}
             <p className="text-xs text-muted-foreground">
               A request is not a confirmed booking. You’ll get a reference number straight away.
             </p>
