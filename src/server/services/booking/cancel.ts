@@ -93,13 +93,11 @@ export async function requestCancellation(
         : { manualReview: true, reason: "No structured cancellation rules on the policy" },
     });
     if (!calc) {
-      await tx
-        .insert(bookingNotes)
-        .values({
-          bookingId: b.id,
-          visibility: "internal",
-          body: "Cancellation requested; the policy has no structured rules, so charges need manual review.",
-        });
+      await tx.insert(bookingNotes).values({
+        bookingId: b.id,
+        visibility: "internal",
+        body: "Cancellation requested; the policy has no structured rules, so charges need manual review.",
+      });
     }
     await applyTransition(
       tx,

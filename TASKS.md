@@ -71,17 +71,22 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[cfg]` built, awaiting
 - [x] Tests: 131 unit + integration, 25 E2E; empty-catalogue build verified
 
 ## Phase 4 — Booking & payments
-- [ ] Price rules engine + server quote calculation + quote expiry
-- [ ] Booking flow (select → configure → validate → travellers → review → pay/request)
-- [ ] Booking state machine + status history + transitions tests
-- [ ] Inventory holds with expiry job; overselling protection
-- [ ] Idempotency on booking + payment init
-- [ ] Paystack adapter (init, verify, webhook HMAC), mock adapter
-- [ ] Invoices, payment schedules (deposit/instalments), transactions, append-only ledger
-- [ ] Receipts/invoice PDFs
-- [ ] Guest booking lookup (OTP / magic link)
-- [ ] Cancellation requests + policy calculation + refunds workflow
-- [ ] Reconciliation records
+- [x] Quote engine (pure, unit-tested): per-traveller room pricing, add-ons, fees/tax, deposit plan, balance date; quotes stored for 24 h and immutable once accepted
+- [x] Booking flow: dates/rooms/extras → server quote → travellers + contact + terms → booking; price-change detection forces re-acceptance
+- [x] Booking state machine with per-type rules, append-only status history, unit-tested
+- [x] Seat holds (30 min instant, 72 h request) with DB-enforced oversell protection; expiry job at `POST /api/cron/release-holds`
+- [x] Idempotency on booking creation, payment start and payment recording
+- [x] Paystack adapter (initialize, verify, signed webhooks, refunds) per current docs `[cfg]` awaiting test keys; simulated adapter `[sim]` for development and tests
+- [x] Invoices, deposit/balance schedule, append-only transactions and ledger; ledger reconciles with booking balance (tested)
+- [x] Receipt / invoice page (print or save as PDF from the browser)
+- [ ] Generated PDF files → Phase 5 with notifications
+- [x] Guest booking lookup with emailed one-time code (10 min, single use, 5-attempt lock)
+- [x] Customer cancellation requests with policy-based charges frozen on the request
+- [ ] Staff approval of cancellations, refunds and confirming request-to-book bookings → Phase 5 admin
+- [ ] Reconciliation runs → Phase 5 finance
+- [x] Customer account: bookings list; booking page with pay, cancel, history and receipt
+- [x] Tests: 173 unit + integration (incl. oversell race, duplicate webhooks, bad signatures, expiry, guest codes); 30 E2E incl. J02, J04, J05, J17 against dev and production builds
+- [x] Security: upgraded Next.js 16.4.0 → 16.4.3 (two critical RCE advisories), zod 4.6.7, transitive floors; production audit clean
 
 ## Phase 5 — Customer portal & operations
 - [ ] Customer dashboard, bookings, payments, saved items, settings, support tickets

@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, lte, sql } from "drizzle-orm";
 import { db } from "@/server/db/client";
 import {
   bookingItems,
@@ -8,11 +8,14 @@ import {
   bookings,
   cancellationRequests,
   invoices,
+  packageDepartures,
+  packageOptions,
   packages,
   paymentScheduleItems,
   policies,
   transactions,
 } from "@/server/db/schema";
+import { isBookableDeparture } from "@/server/services/pricing/from-price";
 
 /**
  * Everything the booking page shows, for a viewer already authorised by access.ts. Passport
@@ -130,4 +133,65 @@ export async function listBookingsForUser(userId: string) {
       ),
     )
     .orderBy(desc(bookings.createdAt));
+}
+
+/**
+ * Live (uncached) choices for the booking wizard: rooms, extras and departures with their
+ * availability right now. The catalogue pages may be cached for hours; booking must not be.
+ */
+export async function getBookingOptions(packageSlug: string, now = new Date()) {
+  const [pkg] = await db
+    .select({
+      id: packages.id,
+      slug: packages.slug,
+      title: packages.title,
+      bookingMode: packages.bookingMode,
+      maxPax: packages.maxPax,
+      durationDays: packages.durationDays,
+      cancellationPolicyId: packages.cancellationPolicyId,
+    })
+    .from(packages)
+    .where(
+      and(eq(packages.slug, packageSlug), eq(packages.status, "published"), lte(packages.publishedAt, sql`now()`)),
+    );
+  if (!pkg) return null;
+
+  const today = now.toISOString().slice(0, 10);
+  const [opts, deps, policy] = await Promise.all([
+    db.select().from(packageOptions).where(eq(packageOptions.packageId, pkg.id)).orderBy(asc(packageOptions.position)),
+    db
+      .select()
+      .from(packageDepartures)
+      .where(eq(packageDepartures.packageId, pkg.id))
+      .orderBy(asc(packageDepartures.startDate)),
+    pkg.cancellationPolicyId
+      ? db
+          .select({ title: policies.title, body: policies.body })
+          .from(policies)
+          .where(eq(policies.id, pkg.cancellationPolicyId))
+      : Promise.resolve([]),
+  ]);
+
+  return {
+    ...pkg,
+    rooms: opts.filter((o) => o.kind === "room").map((o) => ({ id: o.id, name: o.name, occupancy: o.occupancy })),
+    addons: opts.filter((o) => o.kind === "addon").map((o) => ({ id: o.id, name: o.name })),
+    departures: deps
+      .filter((d) => d.startDate > today && d.status !== "cancelled")
+      .map((d) => {
+        const remaining = d.capacity - d.seatsHeld - d.seatsConfirmed;
+        const bookable = isBookableDeparture(d, today);
+        return {
+          id: d.id,
+          startDate: d.startDate,
+          endDate: d.endDate,
+          availability: !bookable
+            ? ("closed" as const)
+            : remaining <= 4 || d.status === "limited"
+              ? ("limited" as const)
+              : ("open" as const),
+        };
+      }),
+    cancellationPolicy: policy[0] ?? null,
+  };
 }

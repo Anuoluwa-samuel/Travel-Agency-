@@ -2,7 +2,7 @@
 
 ORBIS is a full travel business platform: a public site, packages and bookings, a customer portal, planning tools and an operations back office. It is built for an agency based in Nigeria that serves international customers.
 
-> **Status:** Phases 0–3 done (legal page text pending). Next: Phase 4, booking and payments. See [TASKS.md](TASKS.md).
+> **Status:** Phases 0–4 done. Booking and payments work end to end with a simulated payment provider until Paystack keys are added. Next: Phase 5, operations. See [TASKS.md](TASKS.md).
 
 ## Documentation
 
@@ -93,6 +93,13 @@ In development, emails (verification, password reset) are printed to the server 
 | `pnpm db:migrate` | Apply migrations |
 | `pnpm db:seed` | Load fictional development data (refuses to run in staging or production) |
 | `pnpm db:studio` | Drizzle Studio |
+
+## Payments
+
+- With `PAYSTACK_SECRET_KEY` and `PAYSTACK_PUBLIC_KEY` set, checkout uses Paystack. Point the Paystack dashboard webhook at `https://<your-domain>/api/webhooks/paystack`.
+- Without keys, development and tests use a **simulated** checkout at `/dev/mock-checkout` (clearly labelled; no money moves). Production without keys shows "online payment unavailable" instead.
+- Unpaid holds are released by `POST /api/cron/release-holds` with `Authorization: Bearer $CRON_SECRET`; schedule it every few minutes.
+- To try it: open the Cape Town package, choose **Book now**, pay the deposit on the simulated checkout.
 
 ## Continuous integration
 

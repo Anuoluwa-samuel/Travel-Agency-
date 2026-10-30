@@ -180,13 +180,11 @@ export async function recordVerifiedCharge(
     }
 
     if (paid > booking.totalMinor) {
-      await tx
-        .insert(bookingNotes)
-        .values({
-          bookingId: booking.id,
-          visibility: "internal",
-          body: "Paid more than the booking total. Review for refund.",
-        });
+      await tx.insert(bookingNotes).values({
+        bookingId: booking.id,
+        visibility: "internal",
+        body: "Paid more than the booking total. Review for refund.",
+      });
     }
 
     logger.info({ bookingId: booking.id, status: row.status, via }, "Payment recorded");

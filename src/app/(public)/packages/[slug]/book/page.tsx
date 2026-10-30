@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { BookingWizard } from "@/components/booking/booking-wizard";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { siteUrl } from "@/config/site";
-import { getPackage, getPublishedSlugs, staticSlugParams } from "@/server/services/catalogue/queries";
+import { getPublishedSlugs, staticSlugParams } from "@/server/services/catalogue/queries";
+import { getBookingOptions } from "@/server/services/booking/queries";
 
 export async function generateStaticParams() {
   const { packages } = await getPublishedSlugs();
@@ -26,7 +28,9 @@ export default function BookPage(props: PageProps<"/packages/[slug]/book">) {
 
 async function Book({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const p = await getPackage(slug);
+  // Availability must be live at booking time, never a cached snapshot.
+  await connection();
+  const p = await getBookingOptions(slug);
   if (!p) notFound();
   if (p.bookingMode === "enquiry") redirect(`/contact?category=package&package=${p.slug}`);
 
@@ -44,9 +48,7 @@ async function Book({ params }: { params: Promise<{ slug: string }> }) {
         <h1 className="text-3xl md:text-4xl">
           {p.bookingMode === "instant" ? "Book" : "Request to book"}: {p.title}
         </h1>
-        <p className="text-muted-foreground">
-          {p.durationDays} days · {p.destinationName}, {p.countryName}
-        </p>
+        <p className="text-muted-foreground">{p.durationDays} days</p>
       </div>
       <BookingWizard
         pkg={{
