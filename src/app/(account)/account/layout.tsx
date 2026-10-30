@@ -1,4 +1,4 @@
-import { LayoutDashboard, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Luggage, ShieldCheck } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Logo } from "@/components/brand/logo";
@@ -13,6 +13,7 @@ import { getCurrentUser } from "@/server/auth/session";
  */
 const sections = [
   { href: "/account", label: "Overview", icon: LayoutDashboard, exact: true },
+  { href: "/account/bookings", label: "Bookings", icon: Luggage },
   { href: "/account/security", label: "Sign-in & security", icon: ShieldCheck },
 ];
 

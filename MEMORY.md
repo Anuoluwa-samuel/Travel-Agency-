@@ -4,7 +4,7 @@ Running record of decisions, context and state so any contributor (human or AI) 
 
 ## Current state
 
-- **Phase:** 3 complete on branch `phase-3/public-experience` (stacked on `phase-2/foundation`, PR #2 still open, nothing from Phase 3 pushed). Only legal pages remain, blocked on owner-approved text. Next: Phase 4, booking & payments.
+- **Phase:** 4 complete on branch `phase-4/booking-payments` (PRs #1–#3 merged). Staff-side booking actions (confirm requests, approve cancellations, refunds, reconciliation) move to Phase 5. Next: Phase 5, customer portal & operations.
 - **Repo:** https://github.com/Anuoluwa-samuel/Travel-Agency- (was empty at start; fresh build)
 - **Local path:** `~/Downloads/travel agency`
 - **Default branch:** `main`
@@ -37,6 +37,12 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | 2026-10-15 | Request-time pages that read the clock call `await connection()` first (Cache Components) | Phase 3 |
 | 2026-10-15 | Article bodies use a small safe format (## headings, lists, links, **bold**) rendered as React elements; links limited to site paths and http(s) | Phase 3 |
 | 2026-10-15 | E2E: own DB `orbis_e2e` reset by `tests/e2e/prepare-db.ts` inside the webServer command (Playwright starts webServer before globalSetup); port 3210 locally (3100 is used by another app); random seed password per run | Phase 3 |
+| 2026-10-30 | **Security:** Next.js 16.4.0 had two critical RCE advisories (image optimizer SVG; `use cache` typed arrays). Upgraded to 16.4.3; zod 4.6.7; pnpm `overrides` floors for fast-uri, undici, qs, body-parser, systeminformation; `shadcn` moved to devDependencies. `pnpm audit --prod` clean; 3 dev-only issues remain inside shadcn/drizzle-kit tooling | package.json |
+| 2026-10-30 | Payments: Paystack when `PAYSTACK_SECRET_KEY` is set; otherwise the simulated provider outside production; production without keys shows "online payment unavailable". Charges are recorded once via unique `(provider, provider_reference, kind)`; browser returns are always re-verified server-side | ARCHITECTURE §7 |
+| 2026-10-30 | Ledger sign: charge_due +, payment_received −, refund_issued +; sum per booking = balance (tested) | finance.ts |
+| 2026-10-30 | Instant packages: deposit converts the seat hold and confirms items; request packages wait for staff (Phase 5) before an invoice exists | Phase 4 |
+| 2026-10-30 | Booking wizard loads rooms/departures live (`connection()` + uncached query); catalogue pages stay cached | Phase 4 |
+| 2026-10-30 | Passport numbers and dates of birth: AES-256-GCM with the booking id as AAD; only last 4 shown | lib/crypto.ts |
 | 2026-10-15 | Typed routes off for now: nav config holds hrefs for unbuilt pages behind `live: false` | config/navigation.ts |
 | 2026-10-15 | Next.js App Router + TS + Tailwind + shadcn/ui | ARCHITECTURE §1 |
 | 2026-10-15 | PostgreSQL + Drizzle; pg-boss for jobs (no Redis in v1) | ADR-002, ADR-003 |
@@ -77,6 +83,13 @@ Running record of decisions, context and state so any contributor (human or AI) 
 | Weather / flight status / advisories | not started |
 
 ## Phase log
+
+### Phase 4 — 2026-10-30
+- Schema for quotes, bookings, travellers, items, holds, cancellation requests, guest codes, invoices, schedules, payment attempts, transactions, refunds, ledger, webhook events; append-only triggers on transactions, ledger and status history.
+- Quote engine, state machine, cancellation calculator (pure); booking creation with locking and re-pricing; hold expiry; Paystack + simulated adapters; webhook + return verification; guest lookup; booking UI; account bookings.
+- Second demo package (Cape Town) in instant mode to exercise payments.
+- Found and fixed: critical Next.js vulnerabilities (upgrade); booking wizard showed cached departures; savepoint needed for reference retries inside a transaction; simulated checkout left a stale URL after redirect.
+- Tests: 173 unit/integration, 30 E2E (dev and production builds).
 
 ### Phase 3 (part 2) — 2026-10-15
 - Consultations: schema + exclusion constraint, slot engine (timezone/DST-aware, pure, tested), booking service with concurrency retry, pages, seed (3 services, staff hours).

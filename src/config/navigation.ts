@@ -63,7 +63,7 @@ export const footerNav: NavGroup[] = [
   {
     label: "Help",
     items: [
-      { label: "Find a booking", href: "/booking/lookup", live: false },
+      { label: "Find a booking", href: "/booking/lookup", live: true },
       { label: "Contact us", href: "/contact", live: true },
       { label: "Your account", href: "/account", live: true },
     ],

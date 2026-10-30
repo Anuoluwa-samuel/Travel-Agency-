@@ -388,3 +388,103 @@ Want a second pair of eyes on your numbers? [Book a free planning call](/consult
 Check your airline's baggage allowance and keep valuables in your carry-on. If anything changes with your plans, [let us know](/contact).`,
   },
 ] as const;
+
+/**
+ * Second demo package in INSTANT mode (ORBIS's own allocation, bookable and payable online),
+ * used to exercise the full booking → payment path. Fictional prices.
+ */
+export const capeTownPackage = {
+  slug: "cape-town-city-and-winelands-5-days",
+  title: "Cape Town: City, Coast & Winelands",
+  summary: "Five days of Table Mountain views, Atlantic coastline and a day in the Cape Winelands.",
+  description:
+    "A compact first visit to Cape Town with time on the mountain, the Cape Peninsula and Stellenbosch. DEMO CONTENT — prices and availability are fictional.",
+  destination: "cape-town",
+  travelStyle: "city",
+  durationDays: 5,
+  nights: 4,
+  dateMode: "fixed",
+  bookingMode: "instant",
+  minPax: 1,
+  maxPax: 10,
+  meetingInfo: "Airport transfer from Cape Town International (CPT) is included.",
+  days: [
+    {
+      day: 1,
+      title: "Arrive in Cape Town",
+      overnight: "Cape Town",
+      b: false,
+      l: false,
+      d: true,
+      items: [{ kind: "transfer", title: "Airport to hotel transfer" }],
+    },
+    {
+      day: 2,
+      title: "Table Mountain and the city",
+      overnight: "Cape Town",
+      b: true,
+      l: false,
+      d: false,
+      items: [{ kind: "activity", title: "Table Mountain cableway" }],
+    },
+    {
+      day: 3,
+      title: "Cape Peninsula",
+      overnight: "Cape Town",
+      b: true,
+      l: true,
+      d: false,
+      items: [{ kind: "activity", title: "Cape Point and Boulders Beach" }],
+    },
+    {
+      day: 4,
+      title: "Winelands day",
+      overnight: "Cape Town",
+      b: true,
+      l: false,
+      d: false,
+      items: [{ kind: "activity", title: "Stellenbosch tasting tour", optional: true }],
+    },
+    {
+      day: 5,
+      title: "Depart",
+      overnight: null,
+      b: true,
+      l: false,
+      d: false,
+      items: [{ kind: "transfer", title: "Hotel to airport transfer" }],
+    },
+  ],
+  inclusions: [
+    "4 nights' accommodation",
+    "Daily breakfast",
+    "Airport transfers",
+    "Table Mountain cableway ticket",
+    "Cape Peninsula day tour",
+  ],
+  exclusions: ["International flights", "Visa fees", "Travel insurance", "Optional excursions"],
+  options: [
+    { kind: "room", code: "TWIN", name: "Twin / double share", basis: "per_person", occupancy: 2, required: false },
+    { kind: "room", code: "SGL", name: "Single room", basis: "per_person", occupancy: 1, required: false },
+    {
+      kind: "addon",
+      code: "WINE",
+      name: "Stellenbosch tasting tour",
+      basis: "per_person",
+      occupancy: null,
+      required: false,
+    },
+  ],
+  prices: [
+    { option: "TWIN", traveller: "adult", amount: 120_000_000n },
+    { option: "TWIN", traveller: "child", amount: 70_000_000n },
+    { option: "SGL", traveller: "adult", amount: 168_000_000n },
+    { option: "WINE", traveller: "adult", amount: 4_500_000n },
+  ],
+  departures: [
+    { offsetDays: 75, capacity: 10 },
+    { offsetDays: 120, capacity: 10 },
+  ],
+} as const;
+
+export const demoPackages = [demoPackage, capeTownPackage] as const;

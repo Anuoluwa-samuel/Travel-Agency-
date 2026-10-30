@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// J02 (first half): browse a package and start a request. Online checkout arrives in Phase 4.
+// J02 (first half): browse a package, then choose between booking and asking a question.
 test("package page shows structured itinerary, prices and a request route", async ({ page }) => {
   await page.goto("/packages");
   await page.getByRole("link", { name: "Zanzibar: Stone Town & North Coast" }).click();
@@ -14,7 +14,11 @@ test("package page shows structured itinerary, prices and a request route", asyn
   // Exact seat counts are never shown.
   await expect(page.getByText(/\d+ seats? left/i)).toHaveCount(0);
 
-  await page.getByRole("link", { name: "Request to book" }).click();
+  await expect(page.getByRole("link", { name: "Request to book" })).toHaveAttribute(
+    "href",
+    "/packages/zanzibar-stone-town-and-beach-7-days/book",
+  );
+  await page.getByRole("link", { name: "Ask a question first" }).click();
   await expect(page).toHaveURL(/\/contact\?category=package&package=zanzibar-stone-town-and-beach-7-days/);
   await expect(page.getByText("About: Zanzibar: Stone Town & North Coast")).toBeVisible();
   await expect(page.getByLabel("What can we help with?")).toHaveValue("package");

@@ -50,6 +50,20 @@
       "when": 1792063014764,
       "tag": "0006_articles",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792400613138,
+      "tag": "0007_booking_finance",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792400614039,
+      "tag": "0008_booking_finance_guards",
+      "breakpoints": true
     }
   ]
 }

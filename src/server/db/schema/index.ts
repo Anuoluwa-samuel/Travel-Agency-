@@ -4,3 +4,5 @@ export * from "./platform";
 export * from "./crm";
 export * from "./consultations";
 export * from "./content";
+export * from "./booking";
+export * from "./finance";
